@@ -98,10 +98,10 @@ def rollout(policy, env, horizon, render=False, video_writer=None, video_skip=5,
     policy.start_episode()
     obs = env.reset()
     state_dict = env.get_state()
-
     # hack that is necessary for robosuite tasks for deterministic action playback
     obs = env.reset_to(state_dict)
 
+    initial_obs = obs['robot0_eef_pos']
     results = {}
     video_count = 0  # video frame counter
     total_reward = 0.
@@ -174,7 +174,7 @@ def rollout(policy, env, horizon, render=False, video_writer=None, video_skip=5,
         else:
             traj[k] = np.array(traj[k])
 
-    return stats, traj
+    return stats, traj, initial_obs
 
 
 def run_trained_agent(args):
@@ -229,8 +229,9 @@ def run_trained_agent(args):
         total_samples = 0
 
     rollout_stats = []
+    initial_observations = []
     for i in range(rollout_num_episodes):
-        stats, traj = rollout(
+        stats, traj, initial_obs = rollout(
             policy=policy, 
             env=env, 
             horizon=rollout_horizon, 
@@ -241,6 +242,7 @@ def run_trained_agent(args):
             camera_names=args.camera_names,
         )
         rollout_stats.append(stats)
+        initial_observations.append(initial_obs)
 
         if write_dataset:
             # store transitions
@@ -275,7 +277,7 @@ def run_trained_agent(args):
         data_grp.attrs["env_args"] = json.dumps(env.serialize(), indent=4) # environment info
         data_writer.close()
         print("Wrote dataset trajectories to {}".format(args.dataset_path))
-
+    #np.save("n01.npy", initial_observations)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
