@@ -111,7 +111,8 @@ def rollout(policy, env, horizon, render=False, video_writer=None, video_skip=5,
         traj.update(dict(obs=[], next_obs=[]))
     try:
         for step_i in range(horizon):
-
+            #print(obs['object'][2])
+            #print(obs['object'][-1])
             # get action from policy
             act = policy(ob=obs)
 

@@ -112,6 +112,7 @@ def extract_trajectory(
         initial_state_dict=initial_state,
     )
     traj_len = states.shape[0]
+
     # iteration variable @t is over "next obs" indices
     for t in range(1, traj_len + 1):
 
@@ -146,6 +147,7 @@ def extract_trajectory(
 
         # update for next iter
         obs = deepcopy(next_obs)
+
 
     # convert list of dict to dict of list for obs dictionaries (for convenient writes to hdf5 dataset)
     traj["obs"] = TensorUtils.list_of_flat_dict_to_dict_of_list(traj["obs"])
@@ -245,6 +247,7 @@ def dataset_states_to_obs(args):
     print("input file: {}".format(args.dataset))
     print("output file: {}".format(output_path))
 
+    print('iterating over demos')
     total_samples = 0
     for ind in tqdm(range(len(demos))):
         ep = demos[ind]
