@@ -278,7 +278,7 @@ def run_trained_agent(args):
         data_grp.attrs["env_args"] = json.dumps(env.serialize(), indent=4) # environment info
         data_writer.close()
         print("Wrote dataset trajectories to {}".format(args.dataset_path))
-    #np.save("n01.npy", initial_observations)
+    np.save("n1000.npy", initial_observations)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
